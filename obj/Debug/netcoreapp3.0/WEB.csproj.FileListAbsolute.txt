@@ -1,0 +1,4 @@
+D:\ProgramData\Microsoft\VisualStudio\source\repos\WEB\obj\Debug\netcoreapp3.0\WEB.csprojAssemblyReference.cache
+D:\ProgramData\Microsoft\VisualStudio\source\repos\WEB\obj\Debug\netcoreapp3.0\WEB.MvcApplicationPartsAssemblyInfo.cache
+D:\ProgramData\Microsoft\VisualStudio\source\repos\WEB\obj\Debug\netcoreapp3.0\WEB.AssemblyInfoInputs.cache
+D:\ProgramData\Microsoft\VisualStudio\source\repos\WEB\obj\Debug\netcoreapp3.0\WEB.AssemblyInfo.cs
