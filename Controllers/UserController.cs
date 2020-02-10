@@ -10,9 +10,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WEB.Models;
+using WEBTest.Models;
 
-namespace WEB.Controllers
+namespace WEBTest.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

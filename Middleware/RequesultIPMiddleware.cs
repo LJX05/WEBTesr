@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WEB.Middleware
+namespace WEBTest.Middleware
 {
     public class RequesultIPMiddleware
     {

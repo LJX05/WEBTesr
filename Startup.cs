@@ -9,10 +9,10 @@ using ServiceDLL;
 using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
-using WEB.Middleware;
-using WEB.Models;
+using WEBTest.Middleware;
+using WEBTest.Models;
 
-namespace WEB
+namespace WEBTest
 {
     public class Startup
     {

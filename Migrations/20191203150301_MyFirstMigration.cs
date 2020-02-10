@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WEB.Migrations
+namespace WEBTest.Migrations
 {
     public partial class MyFirstMigration : Migration
     {

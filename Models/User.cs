@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WEB.Models
+namespace WEBTest.Models
 {
     //针对前端的model
     public class User

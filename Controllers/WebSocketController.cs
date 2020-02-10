@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace WEB.Controllers
+namespace WEBTest.Controllers
 {
     public class WebSocketController
     {

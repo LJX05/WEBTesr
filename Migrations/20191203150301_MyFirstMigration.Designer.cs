@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WEB.Models;
+using WEBTest.Models;
 
-namespace WEB.Migrations
+namespace WEBTest.Migrations
 {
     [DbContext(typeof(DataContext))]
     [Migration("20191203150301_MyFirstMigration")]
