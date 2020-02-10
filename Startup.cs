@@ -33,7 +33,7 @@ namespace WEB
             services.AddDistributedMemoryCache();
             services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1); 
-            //使用缓存服务111
+            //使用缓存服务
             services.AddMemoryCache();
            
         }
