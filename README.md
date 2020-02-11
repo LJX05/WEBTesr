@@ -81,8 +81,8 @@
 ### 1.2 异步编程之IO绑定
 
 1. 推荐查阅微软文档了解异步的相关概念及相关原理;
-[微软官方文档~异步编程模式](https://docs.microsoft.com/zh-cn/dotnet/csharp/async);
-[微软官方文档~深入了解异步](https://docs.microsoft.com/zh-cn/dotnet/standard/async-in-depth);
+   [微软官方文档~异步编程模式](https://docs.microsoft.com/zh-cn/dotnet/csharp/async);
+   [微软官方文档~深入了解异步](https://docs.microsoft.com/zh-cn/dotnet/standard/async-in-depth);
 
 2. 相关自己理解重要概念
    1. 任务(Task对象)是用于实现称之为并发 Promise 模型的构造。 简单地说，它们“承诺”，会在稍后完成工作。
@@ -94,4 +94,4 @@
 
    4. 总结:对于I/O绑定和CPU绑定的区别。因为线程是操作系统对CPU(硬件设备)逻辑资源上的一种抽象,所以导致他们异步模式存在差异性(仅对C#这种异步实现)。因为I/O涉及多种不同与CPU的硬件资源，所以线程在执行到最底层等待I/O响应时(等待数据)，操作系统将会释放此线程的等待将其归还给线程池中，而I/O将会挂起直到有数据时操作系统进行异步恢复，线程池重新分配线程进行后续工作。与之相反的异步实现是可以用于一个线程进行I/O的等待这样将会造成资源的浪费。而对于CPU绑定是无法解决线程专用于计算的问题。以下会通过图例进行模拟说明。
 
-   ![异步I/O绑定拟人图](https://github.com/LJX05/WEBTest/tree/master/picture/Asyn_personate.png)
+   ![异步I/O绑定拟人图](./picture/Asyn_personate.png)
