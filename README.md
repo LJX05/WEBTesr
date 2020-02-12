@@ -10,7 +10,7 @@
 
 2. 好处:提高性能，不需要类似于心跳模式方式循环请求Http请求
 
-3. 在dotnetCore 中的用法具体可以查看[微软官方文档](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/websockets?view=aspnetcore-3.1)
+3. 在dotnetCore 中的用法具体可以查看[【微软官方文档】](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/websockets?view=aspnetcore-3.1)
 4. 以为是本文的例子:
 
             #region UseWebSocketsOptionsAO
@@ -81,8 +81,8 @@
 ### 1.2 异步编程之IO绑定
 
 1. 推荐查阅微软文档了解异步的相关概念及相关原理;
-   [微软官方文档~异步编程模式](https://docs.microsoft.com/zh-cn/dotnet/csharp/async);
-   [微软官方文档~深入了解异步](https://docs.microsoft.com/zh-cn/dotnet/standard/async-in-depth);
+   [【异步编程模式】](https://docs.microsoft.com/zh-cn/dotnet/csharp/async);
+   [【深入了解异步】](https://docs.microsoft.com/zh-cn/dotnet/standard/async-in-depth);
 
 2. 相关自己理解重要概念
    1. 任务(Task对象)是用于实现称之为并发 Promise 模型的构造。 简单地说，它们“承诺”，会在稍后完成工作。
