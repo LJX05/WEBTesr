@@ -19,11 +19,10 @@ namespace WEBTest.Middleware
         public async Task Invoke(HttpContext context) 
         {
             //等待方法之 前做些事
-            Console.WriteLine("等待方法之 前做些事"+context.Connection.RemoteIpAddress.MapToIPv4());
-            Console.WriteLine("前续1当前线程ID" + Thread.CurrentThread.ManagedThreadId);
-            var a = context.Request.Body;
+            //Console.WriteLine("等待方法之 前做些事"+context.Connection.RemoteIpAddress.MapToIPv4());
+            //Console.WriteLine("前续1当前线程ID" + Thread.CurrentThread.ManagedThreadId);
             await _next.Invoke(context);
-            Console.WriteLine("后续1当前线程ID" + Thread.CurrentThread.ManagedThreadId);
+            //Console.WriteLine("后续1当前线程ID" + Thread.CurrentThread.ManagedThreadId);
         }
     }
 }

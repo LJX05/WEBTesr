@@ -25,17 +25,18 @@ namespace WEBTest
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            string connection = @"Data Source=LAPTOP-IKHOQFAC;Initial Catalog=MyDemo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
+        {   
+            //使用缓存服务
+            services.AddMemoryCache();
             //域生命周期的UserService
             services.AddScoped<IUserService, UserService>();
             services.AddDistributedMemoryCache();
             services.AddSession();
+            //Server=.;Database=CoreDB;Trusted_Connection=True;MultipleActiveResultSets=true
+            string connection = @"Server=.; Database=MyDemo;Trusted_Connection=True;MultipleActiveResultSets=true";
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
+             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1); 
-            //使用缓存服务
-            services.AddMemoryCache();
-           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
