@@ -35,7 +35,6 @@ namespace WEBTest
             //Server=.;Database=CoreDB;Trusted_Connection=True;MultipleActiveResultSets=true
             string connection = @"Server=.; Database=MyDemo;Trusted_Connection=True;MultipleActiveResultSets=true";
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
-             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1); 
         }
 
@@ -44,6 +43,7 @@ namespace WEBTest
         {
             #region 初始化缓存
             var webCache = app.ApplicationServices.GetService<IMemoryCache>();
+            var ff = app.ApplicationServices.GetService(typeof(IMemoryCache));
             IList<WebSocket>  cacheWebSocket  =new List<WebSocket>();
             webCache.Set("webSocketCache", cacheWebSocket);
             #endregion
@@ -73,28 +73,30 @@ namespace WEBTest
             app.UseWebSockets(webSocketOptions);
 
             #endregion UseWebSocketsOptionsAO
-
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.Path == "/ws")
-                {
-                    if (context.WebSockets.IsWebSocketRequest)
-                    {
-                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                        var cache =app.ApplicationServices.GetService<IMemoryCache>();
-                        var webSocketController = new Controllers.WebSocketController(cache);
-                        await webSocketController.Echo(context, webSocket);
-                    }
-                    else
-                    {
-                        context.Response.StatusCode = 400;
-                    }
-                }
-                else
-                {
-                    await next();
-                }
-            });
+            #region 过期代码
+            //app.Use(async (context, next) =>
+            //{
+            //    if (context.Request.Path == "/ws")
+            //    {
+            //        if (context.WebSockets.IsWebSocketRequest)
+            //        {
+            //            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+            //            var cache =app.ApplicationServices.GetService<IMemoryCache>();
+            //            var webSocketController = new Controllers.WebSocketController(cache);
+            //            await webSocketController.Echo(context, webSocket);
+            //        }
+            //        else
+            //        {
+            //            context.Response.StatusCode = 400;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        await next();
+            //    }
+            //});
+            #endregion
+            app.UseWebSocketMiddleware();
             app.UseMvc();
         }
 

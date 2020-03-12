@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEBTest", "WEBTest.csproj", "{1E9562FC-5703-43F7-B522-CE5AD6126467}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEBCore", "WEBCore.csproj", "{1E9562FC-5703-43F7-B522-CE5AD6126467}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceDLL", "ServiceDLL\ServiceDLL.csproj", "{C7F22537-E8C2-43C1-99F1-9919B34A47C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEBTestTests", "..\WEBTestTests\WEBTestTests.csproj", "{00FE3835-31D3-4F02-80A8-9AAAAD49CC40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C7F22537-E8C2-43C1-99F1-9919B34A47C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7F22537-E8C2-43C1-99F1-9919B34A47C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7F22537-E8C2-43C1-99F1-9919B34A47C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00FE3835-31D3-4F02-80A8-9AAAAD49CC40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00FE3835-31D3-4F02-80A8-9AAAAD49CC40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00FE3835-31D3-4F02-80A8-9AAAAD49CC40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00FE3835-31D3-4F02-80A8-9AAAAD49CC40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,14 +10,21 @@ using System.Threading.Tasks;
 
 namespace WEBTest.Controllers
 {
-    public class WebSocketController
+    public class WebSocketController :ISocket
     {
         private IMemoryCache _cache;
+
+        public int o { get;  }
+
         public WebSocketController(IMemoryCache memoryCache)
         {
             _cache = memoryCache;
         }
-        public async Task Echo(HttpContext context, WebSocket webSocket)
+        public WebSocketController()
+        {
+            
+        }
+        public async Task EchoAsync(HttpContext context, WebSocket webSocket)
         {
             var buffer = new byte[1024 * 4];
             var list = (IList<WebSocket>)_cache.Get("webSocketCache");
