@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WEBTest.Migrations
+namespace WEBCore.Migrations
 {
     public partial class MyFirstMigration : Migration
     {
@@ -11,14 +11,15 @@ namespace WEBTest.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     account = table.Column<string>(nullable: true),
-                    password = table.Column<string>(nullable: true)
+                    password = table.Column<string>(nullable: true),
+                    emial = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
         }
 

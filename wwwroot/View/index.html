@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./dist/CSS/bootstrap.min.css" />
+    <link rel="stylesheet" href="./dist/CSS/signin.css"/>
+    <title>Hello, world!</title>
+</head>
+<body class="text-center">
+    <script src="./dist/JS/jquery-3.0.0.min.js"></script>
+    <script src="./dist/JS/bootstrap.min.js"></script>
+    <script src="./dist/JS/angular-1.7.3.min.js"></script>
+    <script src="./dist/JS/angular-route.min.js"></script>
+    <div ng-app="myApp" ng-controller="myCtrl" class="container">
+        <div class="container" ng-view>
+            <div class="row clearfix">
+                <div class="col-md-3 column">
+                </div>
+                <div class="col-md-6 column">
+                    <form class="form-signin" ng-model="user">
+                        <img class="mb-4" src="./dist/docs/bootstrap-solid.svg" alt="" width="72" height="72">
+                        <h1 class="h3 mb-3 font-weight-normal">请登录</h1>
+                        <label for="inputEmail" class="sr-only ">账号:</label>
+                        <input type="text" ng-model="user.account" id="inputEmail" class="form-control" placeholder="Account" required autofocus>
+                        <label for="inputPassword" class="sr-only">密码</label>
+                        <input type="password" ng-model="user.password" id="inputPassword" value="" class="form-control" placeholder="Password" required>
+                        <div class="checkbox mb-3">
+                            <label>
+                                <input type="checkbox" value="remember-me"> 记住我
+                            </label>
+                        </div>
+                        <button id="btnSubmit" ng-click="submit()" class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+                        <button id="signIn" ng-click="signIn()" class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
+                        <p class="mt-5 mb-3 text-muted">&copy; 2019</p>
+                    </form>
+                </div>
+                <div class="col-md-3 column">
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                </div>
+            </div>
+        </div>
+        <!-- 模态框-->
+        <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                            返回
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        {{msg}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script type="text/javascript">
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function ($scope, $http) {
+
+            $scope.submit = function () {
+                $http({
+                    method: 'post',
+                    url: '/api/User/Login',
+                    data: $scope.user
+                }).then(function successCallback(response) {
+                    $scope.msg = response.data;
+                    // 请求成功执行代码
+                    if ($scope.msg != "No") {
+                        window.location.href = "./Home.html?Uid=" + $scope.msg.id;
+                    } else {
+                        $('#myModal').modal("show")
+                    }
+                   $('#myModal').modal("show")
+                }, function errorCallback(response) {
+                    // 请求失败执行代码
+                });
+            }
+
+            $scope.signIn = function () {
+                $http({
+                    method: 'post',
+                    url: '/api/User/Sign',
+                    data: $scope.user
+                }).then(function successCallback(response) {
+                    $scope.msg = response.data;
+                    // 请求成功执行代码
+                    $('#myModal').modal("show")
+                }, function errorCallback(response) {
+                        // 请求失败执行代码
+                        alert("okkkk");
+                });
+            }
+        });
+
+    </script>
+</body>
+</html >

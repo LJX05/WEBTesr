@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using ServiceDLL;
 using System;
 using System.Collections.Generic;
@@ -32,19 +33,23 @@ namespace WEBTest
             services.AddScoped<IUserService, UserService>();
             services.AddDistributedMemoryCache();
             services.AddSession();
-            //Server=.;Database=CoreDB;Trusted_Connection=True;MultipleActiveResultSets=true
             string connection = @"Server=.; Database=MyDemo;Trusted_Connection=True;MultipleActiveResultSets=true";
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1); 
+
+
+            services.AddControllers().AddNewtonsoftJson(
+                options => options.SerializerSettings.ReferenceLoopHandling 
+                = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             #region 初始化缓存
             var webCache = app.ApplicationServices.GetService<IMemoryCache>();
             var ff = app.ApplicationServices.GetService(typeof(IMemoryCache));
-            IList<WebSocket>  cacheWebSocket  =new List<WebSocket>();
+            IDictionary<string, WebSocket>  cacheWebSocket  =new Dictionary<string,WebSocket>();
             webCache.Set("webSocketCache", cacheWebSocket);
             #endregion
 
@@ -60,7 +65,6 @@ namespace WEBTest
             app.UseHttpsRedirection();
             app.UseMiddleware<RequesultIPMiddleware>();
             app.UseSession();
-
             #region UseWebSocketsOptionsAO
 
             var webSocketOptions = new WebSocketOptions()
@@ -73,33 +77,18 @@ namespace WEBTest
             app.UseWebSockets(webSocketOptions);
 
             #endregion UseWebSocketsOptionsAO
-            #region 过期代码
-            //app.Use(async (context, next) =>
-            //{
-            //    if (context.Request.Path == "/ws")
-            //    {
-            //        if (context.WebSockets.IsWebSocketRequest)
-            //        {
-            //            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-            //            var cache =app.ApplicationServices.GetService<IMemoryCache>();
-            //            var webSocketController = new Controllers.WebSocketController(cache);
-            //            await webSocketController.Echo(context, webSocket);
-            //        }
-            //        else
-            //        {
-            //            context.Response.StatusCode = 400;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        await next();
-            //    }
-            //});
-            #endregion
+          
             app.UseWebSocketMiddleware();
-            app.UseMvc();
-        }
+            app.UseStaticFiles();
+            app.UseRouting();
 
-       
+            //app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
     }
 }

@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./dist/CSS/bootstrap.min.css" />
+    <link rel="stylesheet" href="./dist/CSS/signin.css" />
+    <title>主页</title>
+</head>
+
+<body>
+    <script src="./dist/JS/jquery-3.0.0.min.js"></script>
+    <script src="./dist/JS/bootstrap.min.js"></script>
+    <script src="./dist/JS/angular-1.7.3.min.js"></script>
+    <div ng-app="homeApp" ng-controller="homeController" class="container" style="width:1200px; height:700px">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <h4 class="text-center text-info">
+                    这是一套聊天系统.
+                </h4>
+                <button class="btn btn-info" type="button" id="button-addon2" ng-click="connect()"><span
+                        class="glyphicon glyphicon-search" aria-hidden="true"></span>连接</button>
+                <button class="btn btn-info" type="button" id="button-addon2" ng-click="getFirends()"><span
+                        class="glyphicon glyphicon-search" aria-hidden="true"></span>好友</button>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-2 column bg-white btn">
+                <div class="list-group text-center">
+                    <button type="button" class="list-group-item list-group-item-action " disabled>
+                        好友列表
+                    </button>
+                    <button type="button" class="list-group-item list-group-item-action">好友1</button>
+                    <button type="button" class="list-group-item list-group-item-action">好友2</button>
+                    <button type="button" class="list-group-item list-group-item-action">好友3</button>
+                </div>
+
+            </div>
+            <div class="col-md-10 column ">
+                <div class=" panel panel-default btn" style="width:700px;">
+                    <div class="panel-heading text-center">
+                        <h4>聊天消息</h4>
+                    </div>
+                    <div id="div_panel" class="well bg-white panel-body" style="width:700px;height:500px">
+                        面板内容
+                        <div ng-model="Messge" class="toast btn" data-autohide="false" role="alert"
+                            aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header">
+                                <img src="./dist/docs/bootstrap-solid.svg" class="rounded mr-2 img-thumbnail" alt="...">
+                                <strong class="mr-auto" ng-model="Messge.SenderId">{{Messge.SenderId}}</strong>
+                                <small>11 mins ago</small>
+                                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+
+                            </div>
+                            <div class="toast-body" ng-model="Messge.msgInfo">
+                                {{Messge.msgInfo}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group" style="width:700px; margin-top:15px">
+                        <input type="text" class="form-control" aria-describedby="button-addon2" ng-model="msg">
+                        <div class="input-group-append">
+                            <button class="btn btn-info" type="button" id="button-addon2" ng-click="SendBtn(msg)"><span
+                                    class="glyphicon glyphicon-search" aria-hidden="true"></span>发 送</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        var app = angular.module('homeApp', []);
+        app.config(['$locationProvider', function ($locationProvider) {
+            $locationProvider.html5Mode({
+                enabled: true,
+                requireBase: false
+            });
+        }]);
+        app.controller('homeController', function ($scope, $http, $location) {
+            $scope.Firendid = null;
+            $scope.socket = null;
+            $scope.connect = function () {
+                $scope.socket = new WebSocket("ws://localhost:8029/ws/WebSocket");
+                $scope.socket.onopen = function (event) {
+                    // Web Socket 已连接上，使用 send() 方法发送数据
+                    //ws.send("发送数据");
+                    alert("数据发送中...");
+                };
+                $scope.socket.onclose = function (event) {
+
+                    // 关闭 websocket
+                    alert("连接已关闭...");
+                };
+                $scope.socket.onmessage = function (event) {
+                    var received_msg = event.data;
+                    $scope.Messge = JSON.parse(received_msg);
+                    //$('.toast').toast("show");
+                    alert($scope.Messge.msgInfo);
+                };
+            }
+            $scope.SendBtn = function (msg) {
+                var data = { "msgInfo": msg, "SenderId": $location.search().Uid, "ReceiveId": $scope.Firendid }
+                var jsonStr = JSON.stringify(data);
+                $scope.socket.send(jsonStr);
+            };
+
+            $scope.getFirends = function () {
+                $http({
+                    method: 'post',
+                    url: '/api/User/getFriends',
+                    data: $location.search().Uid
+                }).then(function successCallback(response) {
+                    $scope.Firendid = response.data.friends[0].fid;
+                    alert($scope.Firendid);
+                    // 请求成功执行代码
+                }, function errorCallback(response) {
+                    // 请求失败执行代码
+                    alert(response + "失败");
+                });
+            };
+            //生成toast<!--toast-->
+            $scope.toast = function (msg, id) {
+                var ret = '<div id="' + id + '" class="toast btn" data-autohide="false" role="alert" aria-live="assertive" aria-atomic="true">'
+                    + '<div class="toast-header">'
+                    + '<img src="..." class="rounded mr-2" alt="...">'
+                    + '            <strong class="mr-auto">Bootstrap</strong>'
+                    + '            <small>11 mins ago</small>'
+                    + '            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">'
+                    + '                <span aria-hidden="true">&times;</span>'
+                    + '           </button>'
+                    + '        </div>'
+                    + '       <div class="toast-body">'
+                    + ""
+                    + '       </div> </div>'
+
+                return ret;
+            }
+        });
+    </script>
+
+</body>
+</html>

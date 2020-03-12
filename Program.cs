@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace WEBTest
@@ -21,10 +22,13 @@ namespace WEBTest
             var b = a.Build();//初始化启动类和依赖服务注入
             b.Run();
         }
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        public static IHostBuilder CreateWebHostBuilder(string[] args)
         {
-            var a = WebHost.CreateDefaultBuilder(args);
-            var b =a.UseStartup<Startup>();
+            var a = Host.CreateDefaultBuilder(args);
+            var b = a.ConfigureWebHostDefaults(
+                webBuilder => webBuilder.UseStartup<Startup>()
+                .UseKestrel().UseUrls("http://localhost:8029")
+                );
             return b;
         }
     }

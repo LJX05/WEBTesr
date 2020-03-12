@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using WEBTest.Controllers;
 
 namespace WEBTest.Middleware
@@ -19,8 +21,17 @@ namespace WEBTest.Middleware
             return builder.UseMiddleware<webSocketMiddleware>(builder);
         }
     }
-
-    public class ISocketFactory
+    public class XML
+    {
+        public static IEnumerable<XElement> GetXElements() {
+            XmlReader r = XmlReader.Create(@"D:\ProgramData\Microsoft\VisualStudio\source\repos\WEBTest\Middleware\XMLFile.xml");
+            while (r.NodeType != XmlNodeType.Element)
+                r.Read();
+            XElement e = XElement.Load(r);
+            return e.Elements();
+        }
+    }
+        public class ISocketFactory
     {
         /// <summary>
         /// 生产方法
@@ -30,11 +41,10 @@ namespace WEBTest.Middleware
         /// <returns></returns>
         public static ISocket CreatSocket(string name, IServiceProvider provider)
         {
-            var start = Environment.TickCount;
             var type = Type.GetType(name);
             if (type == null)
             {
-                throw new Exception("is null");
+                throw new Exception("创建类型失败，因为未找到该类型"+name);
             }
             //找到构造方法
             //var constructorM = type.GetMethods();
@@ -53,8 +63,6 @@ namespace WEBTest.Middleware
             }
             //provider.GetService<T>();
             var socket=(ISocket)Activator.CreateInstance(type, parmes.ToArray());
-            var end = Environment.TickCount; ;
-            var a = end - start;
             return socket;
         }
     }
@@ -83,12 +91,22 @@ namespace WEBTest.Middleware
             {
                 if (context.WebSockets.IsWebSocketRequest)
                 {
+                    //打开连接
                     WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                     var cache = _app.ApplicationServices.GetService<IMemoryCache>();
                     string name = context.Request.Path.Value.Split(_websocketPath + "/")[1];
-                    //如果用一个工厂生产对象就好多了
-                    ISocket webSocketController = ISocketFactory.CreatSocket("WEBTest.Controllers." + name + "Controller", _app.ApplicationServices);
-                    await webSocketController.EchoAsync(context, webSocket);
+                    var element=XML.GetXElements().FirstOrDefault(o=>o.Name=="bean"&& (o.Attribute("id")!=null&& o.Attribute("id").Value==name));
+                    if (element == null)
+                    {
+                        context.Response.StatusCode = 400;
+                    }
+                    else {
+                        var N = element.Attribute("class").Value;
+                        //如果用一个工厂生产对象就好多了
+                        ISocket webSocketController = ISocketFactory.CreatSocket(N, _app.ApplicationServices);
+                        await webSocketController.EchoAsync(context, webSocket);
+                    }
+                    
                 }
                 else
                 {

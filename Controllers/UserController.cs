@@ -10,6 +10,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WEBCore.Models;
 using WEBTest.Models;
 
 namespace WEBTest.Controllers
@@ -18,16 +19,24 @@ namespace WEBTest.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        static int flag = 0;
         private readonly DataContext _dbcontext;
-        private IMemoryCache _cache;
-
         private readonly IUserService _userService;
-        public UserController(IUserService userService, IMemoryCache cache)
+        private IMemoryCache _cache;
+        public UserController(IUserService userService, DataContext dbcontext ,IMemoryCache cache)
         {
             _cache = cache;
             _userService = userService;
+            _dbcontext = dbcontext;
+            
         }
-        static int flag = 0;
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<string[]> Get()
@@ -52,6 +61,48 @@ namespace WEBTest.Controllers
         }
 
 
+        [Route("getFriends")]
+        [HttpPost]
+        public async Task<ActionResult<User>> getFriendsAsync([FromBody]int uid)
+        {
+            var user = await _dbcontext.Users.Include(o => o.Friends)
+                            .SingleOrDefaultAsync(o => o.Id == uid);
+            if (user != null)
+            {
+                return user;
+            }
+            return NotFound();
+        }
+
+        [HttpPost("Login")]
+        public async Task<ActionResult<User>> LoginAsync([FromBody]User user)
+        {
+           var user1 = await _dbcontext.Users.Include(o => o.Friends).FirstOrDefaultAsync(o => o.account == user.account && o.password == user.password);
+           if (user1 != null)
+           {
+                Response.Cookies.Append("UserID", user1.Id + "");
+                return user1;
+           }
+            return NotFound();
+        }
+
+        // PUT api/values/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
+        {
+        }
+
+        //注册
+        [Route("SignIn")]
+        [HttpPost]
+        public async Task<ActionResult> SignInAsync([FromBody]User user)
+        {
+
+            await _dbcontext.Users.AddAsync(user);
+            var staus = await _dbcontext.SaveChangesAsync();
+            return Ok(staus);
+        }
+
         [HttpGet("Socket")]
         public ActionResult<string> Socket()
         {
@@ -61,6 +112,31 @@ namespace WEBTest.Controllers
         }
 
         #region 基于TAP模式
+        private async void Client(Socket clientSocket, List<Socket> sockets)
+        {
+            //等待连接
+            string result = string.Empty;
+            byte[] recvBytes = new byte[1024];
+            int bytes;
+            //ArraySegment<byte> buffer, SocketFlags socketFlags
+            var  obj=clientSocket.ReceiveAsync(new ArraySegment<byte>(recvBytes), SocketFlags.None);
+            bytes = await clientSocket.ReceiveAsync(new ArraySegment<byte>(recvBytes), SocketFlags.None);//从客户端接受信息
+            result = Encoding.ASCII.GetString(recvBytes, 0, bytes);
+            //客户端不选择关闭则一直等待
+            while (result != "close")
+            {
+                //向客户端发送(回复)消息
+                await clientSocket.SendAsync(new ArraySegment<byte>(recvBytes), SocketFlags.None);
+                int i = sockets.Count;
+                bytes = await clientSocket.ReceiveAsync(new ArraySegment<byte>(recvBytes), SocketFlags.None);//从客户端接受信息
+                result = Encoding.ASCII.GetString(recvBytes, 0, bytes);
+            }
+            //移除列表里的对象
+            sockets.Remove(clientSocket);
+            clientSocket.Close();
+            clientSocket.Dispose();
+        }
+
         private async void socketService(int port)
         {
             IPAddress ip = IPAddress.Any;
@@ -77,30 +153,6 @@ namespace WEBTest.Controllers
                 clientList.Add(temp);
                 Client(temp, clientList);
             }
-        }
-
-        private async void Client(Socket clientSocket, List<Socket> sockets)
-        {
-            //等待连接
-            string result = string.Empty;
-            byte[] recvBytes = new byte[1024];
-            int bytes;
-            //ArraySegment<byte> buffer, SocketFlags socketFlags
-            bytes = await clientSocket.ReceiveAsync(new ArraySegment<byte>(recvBytes), SocketFlags.None);//从客户端接受信息
-            result = Encoding.ASCII.GetString(recvBytes, 0, bytes);
-            //客户端不选择关闭则一直等待
-            while (result != "close")
-            {
-                //向客户端发送(回复)消息
-                await clientSocket.SendAsync(new ArraySegment<byte>(recvBytes), SocketFlags.None);
-                int i = sockets.Count;
-                bytes = await clientSocket.ReceiveAsync(new ArraySegment<byte>(recvBytes), SocketFlags.None);//从客户端接受信息
-                result = Encoding.ASCII.GetString(recvBytes, 0, bytes);
-            }
-            //移除列表里的对象
-            sockets.Remove(clientSocket);
-            clientSocket.Close();
-            clientSocket.Dispose();
         }
         #endregion
 
@@ -155,31 +207,6 @@ namespace WEBTest.Controllers
                     asyncAccept.AsyncWaitHandle.WaitOne();
                 }
             });
-        }
-
-        [HttpPost("Login")]
-        public ActionResult<string> Login([FromBody]User user)
-        {
-            var a = HttpContext.Request.Body;
-            _userService.Login(user.account, user.password);
-            var b = a.Position = 0;
-            var c = a.Length;
-            HttpContext.Response.Cookies.Append("11", "1111111");
-            return a.ToString();
-        }
-
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-
         }
     }
 }

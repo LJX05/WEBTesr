@@ -4,10 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEBCore", "WEBCore.csproj", "{1E9562FC-5703-43F7-B522-CE5AD6126467}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C7F22537-E8C2-43C1-99F1-9919B34A47C2} = {C7F22537-E8C2-43C1-99F1-9919B34A47C2}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceDLL", "ServiceDLL\ServiceDLL.csproj", "{C7F22537-E8C2-43C1-99F1-9919B34A47C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEBTestTests", "..\WEBTestTests\WEBTestTests.csproj", "{00FE3835-31D3-4F02-80A8-9AAAAD49CC40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOPframework", "..\AOPframework\AOPframework.csproj", "{8AB6B05B-3635-4713-9AB1-0E68E350421C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +26,10 @@ Global
 		{C7F22537-E8C2-43C1-99F1-9919B34A47C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7F22537-E8C2-43C1-99F1-9919B34A47C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7F22537-E8C2-43C1-99F1-9919B34A47C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{00FE3835-31D3-4F02-80A8-9AAAAD49CC40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00FE3835-31D3-4F02-80A8-9AAAAD49CC40}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00FE3835-31D3-4F02-80A8-9AAAAD49CC40}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00FE3835-31D3-4F02-80A8-9AAAAD49CC40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AB6B05B-3635-4713-9AB1-0E68E350421C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AB6B05B-3635-4713-9AB1-0E68E350421C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AB6B05B-3635-4713-9AB1-0E68E350421C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AB6B05B-3635-4713-9AB1-0E68E350421C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
