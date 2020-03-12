@@ -60,7 +60,6 @@ namespace WEBTest
             app.UseHttpsRedirection();
             app.UseMiddleware<RequesultIPMiddleware>();
             app.UseSession();
-
             #region UseWebSocketsOptionsAO
 
             var webSocketOptions = new WebSocketOptions()
@@ -73,29 +72,7 @@ namespace WEBTest
             app.UseWebSockets(webSocketOptions);
 
             #endregion UseWebSocketsOptionsAO
-            #region 过期代码
-            //app.Use(async (context, next) =>
-            //{
-            //    if (context.Request.Path == "/ws")
-            //    {
-            //        if (context.WebSockets.IsWebSocketRequest)
-            //        {
-            //            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-            //            var cache =app.ApplicationServices.GetService<IMemoryCache>();
-            //            var webSocketController = new Controllers.WebSocketController(cache);
-            //            await webSocketController.Echo(context, webSocket);
-            //        }
-            //        else
-            //        {
-            //            context.Response.StatusCode = 400;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        await next();
-            //    }
-            //});
-            #endregion
+          
             app.UseWebSocketMiddleware();
             app.UseMvc();
         }
