@@ -10,7 +10,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEBCore", "WEBCore.csproj",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceDLL", "ServiceDLL\ServiceDLL.csproj", "{C7F22537-E8C2-43C1-99F1-9919B34A47C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOPframework", "..\AOPframework\AOPframework.csproj", "{8AB6B05B-3635-4713-9AB1-0E68E350421C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AOPframework", "AOPframework\AOPframework.csproj", "{8AB6B05B-3635-4713-9AB1-0E68E350421C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
